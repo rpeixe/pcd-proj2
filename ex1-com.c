@@ -1,3 +1,9 @@
+/*
+ * Trabalho 2 PCD - Ex 1 - Seção Crítica por espera ocupada (com controle de seção crítica)
+ * Nome: Rodrigo Peixe Oliveira
+ * RA: 147873
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>

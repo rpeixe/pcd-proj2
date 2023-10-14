@@ -1,5 +1,5 @@
 /*
- * Trabalho PCD - Rainbow Game of Life (Versão OpenMP)
+ * Trabalho 2 PCD - Ex 2 - Somatórias, seção crítica e reduções em OpenMP
  * Nome: Rodrigo Peixe Oliveira
  * RA: 147873
  */
@@ -20,7 +20,7 @@ void *newGridThread(void* args);
 void printGrid(double** grid, int generation, int n);
 void setInitialGeneration(double** grid);
 double getNewValue(double** grid, int i, int j);
-int countAlive(double** grid);
+int countAlive(double** grid, int* time_elapsed);
 int getNeighbors(double** grid, int i, int j);
 double getNeighborsMean(double** grid, int i, int j);
 int enforceBorders(int a);
@@ -83,8 +83,11 @@ int main(int argc, char* argv[]) {
     tmili = (int) (1000 * (timeEnd.tv_sec - timeStart.tv_sec) + (timeEnd.tv_usec - timeStart.tv_usec) / 1000);
     tmiliP = tmili - tmiliNP;
 
+    int tmiliCountAlive;
+    int alive = countAlive(grid, tmiliCountAlive);
+
     printf("Threads: %d\n", numThreads);
-    printf("Generation 2000: %d alive\n", countAlive(grid));
+    printf("Generation 2000: %d alive\n", alive);
     printf("Loop time: %d ms\n", tmiliP);
     printf("----------\n");
     
@@ -155,10 +158,12 @@ double getNewValue(double** grid, int i, int j) {
 }
 
 
-int countAlive(double** grid) {
+int countAlive(double** grid, int* time_elapsed) {
     int i, j, total;
+    struct timeval timeStart, timeEnd;
 
     total = 0;
+    gettimeofday(&timeStart, NULL);
 
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
@@ -167,6 +172,10 @@ int countAlive(double** grid) {
             }
         }
     }
+
+    gettimeofday(&timeEnd, NULL);
+
+
 
     return total;
 }
