@@ -1,5 +1,5 @@
 /*
- * Trabalho 2 PCD - Ex 2 - Somatórias, seção crítica e reduções em OpenMP
+ * Trabalho 2 PCD - Ex 2 - Somatórias, seção crítica e reduções em OpenMP (utilizando reduction)
  * Nome: Rodrigo Peixe Oliveira
  * RA: 147873
  */
@@ -83,12 +83,13 @@ int main(int argc, char* argv[]) {
     tmili = (int) (1000 * (timeEnd.tv_sec - timeStart.tv_sec) + (timeEnd.tv_usec - timeStart.tv_usec) / 1000);
     tmiliP = tmili - tmiliNP;
 
-    int tmiliCountAlive;
-    int alive = countAlive(grid, tmiliCountAlive);
+    int tuCountAlive;
+    int alive = countAlive(grid, &tuCountAlive);
 
     printf("Threads: %d\n", numThreads);
     printf("Generation 2000: %d alive\n", alive);
     printf("Loop time: %d ms\n", tmiliP);
+    printf("countAlive() time: %d us\n", tuCountAlive);
     printf("----------\n");
     
     return 0;
@@ -165,6 +166,7 @@ int countAlive(double** grid, int* time_elapsed) {
     total = 0;
     gettimeofday(&timeStart, NULL);
 
+    #pragma omp parallel for private(i, j) reduction(+:total)
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             if (grid[i][j] > 0) {
@@ -175,7 +177,7 @@ int countAlive(double** grid, int* time_elapsed) {
 
     gettimeofday(&timeEnd, NULL);
 
-
+    *time_elapsed = (int) (timeEnd.tv_usec - timeStart.tv_usec);
 
     return total;
 }
