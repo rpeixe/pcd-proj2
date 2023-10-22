@@ -1,3 +1,9 @@
+/*
+ * Trabalho 2 PCD - Ex 3 - Seção Crítica em Java
+ * Nome: Rodrigo Peixe Oliveira
+ * RA: 147873
+ */
+
 public class TrafficController {
 
     private enum Side {LEFT, RIGHT, NONE};
